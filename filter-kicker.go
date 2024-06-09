@@ -35,13 +35,6 @@ func kicker(session filter.Session) filter.Response {
 	}
 }
 
-/*
-func protocolClientCb(timestamp time.Time, session filter.Session, command string) {
-	localSession := session.Get().(*SessionData)
-	fmt.Fprintf(os.Stderr, "%s: %s: kickercount: %d\n", timestamp, session, localSession.kickcount)
-}
-*/
-
 func filterConnectCb(timestamp time.Time, session filter.Session, rdns string, src net.Addr) filter.Response {
 	session.Get().(*SessionData).kickcount = 0
 	return filter.Proceed()
@@ -111,8 +104,6 @@ func main() {
 	filter.SMTP_IN.SessionAllocator(func() filter.SessionData {
 		return &SessionData{}
 	})
-
-	//filter.SMTP_IN.OnProtocolClient(protocolClientCb)
 
 	filter.SMTP_IN.ConnectRequest(filterConnectCb)
 	filter.SMTP_IN.HeloRequest(filterHeloCb)
